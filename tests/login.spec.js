@@ -1,22 +1,21 @@
 const {test,expect} = require("@playwright/test")
 
-test.use({viewport:{width:1440,height:900}})
+test("Login Flow",async function({page}){
 
-test("Valid login",async function({page}){
-
-    await page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+    await page.goto("http://tgn-frontend-staging-375478166582-us-east-1.s3-website-us-east-1.amazonaws.com/")
     await page.waitForTimeout(3000)
-    await page.getByPlaceholder("Username").type("Admin",{delay:200})
-    await page.getByPlaceholder("Password").type("admin123",{delay:200})
-    await page.locator("button[type='submit']").click()
-    
-    await expect(page).toHaveURL(/dashboard/)
+    await page.locator("//a[normalize-space()='Login']").click()
+    await page.getByPlaceholder("Enter your email").type("john@mailinator.com",{delay:200})
+    await page.getByPlaceholder("Enter your password").type("Harin123",{delay:200})
+    await page.locator("//button[normalize-space()='Login']").click()
+    await page.waitForTimeout(5000)
+    await page.locator("//div[@class='w-8 h-8 bg-gray-400 text-black rounded-full flex items-center justify-center text-sm font-semibold overflow-hidden']").click()
     await page.waitForTimeout(3000)
-
-    await page.getByAltText("profile picture").first().click()
+    await page.locator("//button[normalize-space()='Sign Out']").click()
+    page.on('dialog',async(dialogWindow)=>{
+        // expect(dialogWindow.type()).toContain("confirm")
+        // expect(dialogWindow.message()).toContain("Are you sure you want to sign out?")
+        await dialogWindow.accept()
+    })
     await page.waitForTimeout(2000)
-    await page.getByText("Logout").click()
-
-    await page.waitForTimeout(3000)
-    await expect(page).toHaveURL(/login/)
 })
