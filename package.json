@@ -1,0 +1,25 @@
+{
+  "name": "gypsy-nurse-playwright",
+  "version": "1.0.0",
+  "description": "Playwright automation tests for Gypsy Nurse web portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:auth": "playwright test tests/authentication.test.js",
+    "test:profile": "playwright test tests/profile.test.js",
+    "test:ui": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "testing",
+    "gypsy-nurse"
+  ],
+  "author": "QA Engineer",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.8.0"
+  }
+}
