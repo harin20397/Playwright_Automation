@@ -98,32 +98,18 @@ class ProfilePage extends BasePage {
       console.log('Warning: waitForTimeout failed, continuing with state selection');
     }
     
-    // Try to select the state by clicking on the option
+    // Fill the state value directly
+    await stateInput.fill(state);
+    
+    // Wait a bit for the selection to register
     try {
-      // Look for the specific state option in the dropdown
-      const stateOption = this.page.locator(`text=${state}`);
-      if (await stateOption.isVisible()) {
-        await stateOption.click();
-      } else {
-        // If option is not visible, try filling and pressing Enter
-        await stateInput.fill(state);
-        try {
-          await this.page.waitForTimeout(500);
-        } catch (error) {
-          console.log('Warning: waitForTimeout failed, continuing with state selection');
-        }
-        await this.page.keyboard.press('Enter');
-      }
+      await this.page.waitForTimeout(1000);
     } catch (error) {
-      // Fallback: fill and press Enter
-      await stateInput.fill(state);
-      try {
-        await this.page.waitForTimeout(500);
-      } catch (error) {
-        console.log('Warning: waitForTimeout failed, continuing with state selection');
-      }
-      await this.page.keyboard.press('Enter');
+      console.log('Warning: waitForTimeout failed, continuing with state selection');
     }
+    
+    // Press Enter to confirm the selection
+    await this.page.keyboard.press('Enter');
     
     // Wait for selection to register
     try {

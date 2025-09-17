@@ -120,49 +120,34 @@ test.describe('Authentication Tests', () => {
     }
     
     // Add a small delay to ensure the page is fully loaded
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(2000);
     
     try {
-      // Try to locate the user menu button using different approaches
-      // First try by text content
-      let userMenuButton = page.locator('button:has-text("JD John")');
-      
-      // If that doesn't work, try by role and name
-      if (!(await userMenuButton.isVisible({ timeout: 2000 }).catch(() => false))) {
-        userMenuButton = page.getByRole('button', { name: 'JD John' });
-      }
-      
-      // If that doesn't work, try by a more general approach
-      if (!(await userMenuButton.isVisible({ timeout: 2000 }).catch(() => false))) {
-        userMenuButton = page.locator('button').filter({ hasText: 'JD' });
-      }
+      // Locate and click the user menu button
+      // Based on the page structure, the button has text "JD John"
+      const userMenuButton = page.locator('button:has-text("JD John")');
       
       // Wait for user menu button to be visible and click it
       await userMenuButton.waitFor({ state: 'visible', timeout: 10000 });
-      await userMenuButton.click({ force: true });
+      await userMenuButton.click();
       
       // Wait for dropdown to open
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
       
-      // Locate and click the logout button from the dropdown
-      // Try multiple approaches for the logout button as well
-      // The actual button text is "Sign Out", not "Logout"
-      let logoutButton = page.locator('button:has-text("Sign Out")');
+      // Locate and click the sign out button from the dropdown
+      // Based on the page structure, the button has text "Sign Out"
+      const signOutButton = page.locator('button:has-text("Sign Out")');
       
-      // If that doesn't work, try by role
-      if (!(await logoutButton.isVisible({ timeout: 2000 }).catch(() => false))) {
-        logoutButton = page.getByRole('button', { name: 'Sign Out' });
-      }
+      // Wait for sign out button to be visible and click it
+      await signOutButton.waitFor({ state: 'visible', timeout: 5000 });
+      await signOutButton.click();
       
-      await logoutButton.waitFor({ state: 'visible', timeout: 5000 });
-      await logoutButton.click({ force: true });
-      
-      // Wait for navigation after logout
+      // Wait for navigation after sign out
       await page.waitForLoadState('networkidle');
       
       // Verify that we're redirected to the home page after sign out
       const finalUrl = page.url();
-      console.log('Current URL after logout:', finalUrl);
+      console.log('Current URL after sign out:', finalUrl);
       
       // Check that we're on the home page (not login page)
       // After sign out, users are redirected to the home page in this application
@@ -170,7 +155,7 @@ test.describe('Authentication Tests', () => {
       
       console.log('Success: User signed out and redirected to home page');
     } catch (error) {
-      console.log('Error during logout:', error.message);
+      console.log('Error during sign out:', error.message);
       console.log('Current page URL:', page.url());
       throw error;
     }
