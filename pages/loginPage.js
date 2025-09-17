@@ -1,28 +1,28 @@
 // LoginPage class for Gypsy Nurse application
-class LoginPage {
+const BasePage = require('./basePage');
+
+class LoginPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
+    // Locators
+    this.EMAIL_INPUT = '#email';
+    this.PASSWORD_INPUT = '#password';
+    this.LOGIN_BUTTON = 'button[type="submit"]';
+    this.ERROR_MESSAGE = '.error-message';
+    this.FORGOT_PASSWORD_LINK = 'text=Forgot Password?';
+    this.SIGNUP_LINK = 'text=Sign Up';
   }
 
-  // Locators
-  get emailInput() { return this.page.locator('#email'); }
-  get passwordInput() { return this.page.locator('#password'); }
-  get loginButton() { return this.page.locator('button[type="submit"]'); }
-  get errorMessage() { return this.page.locator('.error-message'); }
-  get forgotPasswordLink() { return this.page.locator('text=Forgot Password?'); }
-  get signupLink() { return this.page.locator('text=Sign Up'); }
-
-  // Actions
   async enterEmail(email) {
-    await this.emailInput.fill(email);
+    await this.enterText(this.EMAIL_INPUT, email);
   }
 
   async enterPassword(password) {
-    await this.passwordInput.fill(password);
+    await this.enterText(this.PASSWORD_INPUT, password);
   }
 
   async clickLoginButton() {
-    await this.loginButton.click();
+    await this.click(this.LOGIN_BUTTON);
   }
 
   async login(email, password) {
@@ -32,63 +32,19 @@ class LoginPage {
   }
 
   async getErrorMessage() {
-    return await this.errorMessage.textContent();
-  }
+    return await this.getText(this.ERROR_MESSAGE);
+ }
 
-  async isErrorMessageVisible() {
-    // Adding a wait to ensure the element has time to appear
-    try {
-      await this.errorMessage.waitFor({ state: 'visible', timeout: 5000 });
-      return await this.errorMessage.isVisible();
-    } catch (error) {
-      // If the element is not visible, return false
-      return false;
-    }
-  }
-
-  // Try to find any error message on the page
-  async findAnyErrorMessage() {
-    // Wait a bit for any potential error messages to appear
-    await this.page.waitForTimeout(2000);
-    
-    // Try different possible error message selectors
-    const possibleErrorSelectors = [
-      '.error-message',
-      '.error',
-      '.alert',
-      '.notification.error',
-      '[role="alert"]',
-      '.text-danger',
-      '.invalid-feedback'
-    ];
-    
-    for (const selector of possibleErrorSelectors) {
-      const element = this.page.locator(selector);
-      if (await element.isVisible()) {
-        return {
-          found: true,
-          text: await element.textContent(),
-          selector: selector
-        };
-      }
-    }
-    
-    // If no error message found, return the page title and URL for debugging
-    const title = await this.page.title();
-    const url = this.page.url();
-    return {
-      found: false,
-      title: title,
-      url: url
-    };
+  async isErrorMessagePresent() {
+    return await this.isElementPresent(this.ERROR_MESSAGE);
   }
 
   async clickForgotPassword() {
-    await this.forgotPasswordLink.click();
+    await this.click(this.FORGOT_PASSWORD_LINK);
   }
 
   async clickSignup() {
-    await this.signupLink.click();
+    await this.click(this.SIGNUP_LINK);
   }
 }
 
