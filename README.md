@@ -2,6 +2,10 @@
 
 This project contains automated tests for the Gypsy Nurse web application using Playwright with JavaScript.
 
+## Recent Changes
+
+**September 2025**: Removed all Python-related files from the project. The test suite is now exclusively using JavaScript with Playwright, providing a more consistent and maintainable codebase.
+
 ## Project Structure
 
 ```
