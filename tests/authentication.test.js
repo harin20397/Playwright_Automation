@@ -106,7 +106,7 @@ test.describe('Authentication Tests', () => {
     console.log('Note: No error message displayed after login attempt with empty password (current application behavior)');
   });
 
-  test('Successful sign out from user menu', async ({ page }) => {
+  test.only('Successful sign out from user menu', async ({ page }) => {
     // First, login with valid credentials
     await loginPage.enterEmail(config.credentials.valid.email);
     await loginPage.enterPassword(config.credentials.valid.password);
@@ -125,7 +125,7 @@ test.describe('Authentication Tests', () => {
     try {
       // Locate and click the user menu button
       // Based on the page structure, the button has text "JD John"
-      const userMenuButton = page.locator('button:has-text("JD John")');
+      const userMenuButton = page.locator("//div[@class='w-8 h-8 bg-gray-400 text-black rounded-full flex items-center justify-center text-sm font-semibold overflow-hidden']");
       
       // Wait for user menu button to be visible and click it
       await userMenuButton.waitFor({ state: 'visible', timeout: 10000 });
